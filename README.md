@@ -1,18 +1,25 @@
-## Getting Started
+# Respuestas SQL
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+### Todos los productos del rubro "librería", creados hoy.
 
-## Folder Structure
+`SELECT * FROM producto WHERE id_rubro = <id de libreria> AND fecha = EXTRACT(DAY FROM CURRENT_TIMESTAMP);`
 
-The workspace contains two folders by default, where:
+### Monto total vendido por cliente (mostrar nombre del cliente y monto).
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+`SELECT nombre, SUM(precio_unitario) AS total FROM cliente, venta WHERE cliente.id_cliente = venta.id_cliente;`
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+### Cantidad de ventas por producto.
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+`SELECT nombre, SUM(cantidad) FROM producto, venta WHERE producto.codigo = venta_codigo_producto;`
 
-## Dependency Management
+### Cantidad de productos comprados por cliente en el mes actual.
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+`SELECT nombre, nombre, SUM(cantidad) FROM cliente, producto, venta WHERE cliente.id_cliente = venta.id_cliente AND producto.codigo = venta.codigo_producto AND EXTRACT(MONTH FROM venta.fecha) = EXTRACT(MONTH FROM CURRENT_TIMESTAMP);`
+
+### Ventas que tienen al menos un producto del rubro "bazar".
+
+`SELECT * FROM venta WHERE EXISTS(SELECT codigo_producto FROM venta WHERE venta.codigo_producto = producto.codigo AND producto.id_rubro = <id de bazar> `
+
+### Rubros que no tienen ventas en los últimos 2 meses.
+
+``
